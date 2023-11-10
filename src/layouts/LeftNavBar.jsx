@@ -17,13 +17,15 @@ export default function LeftNavBar ({menuClicked}) {
                         smallMenu={item.smallMenu} 
                         menuClicked={menuClicked}
                         iconSelected={iconSelected}
-                        setIconSelected={setIconSelected}/>
+                        setIconSelected={setIconSelected}
+                    />
                     <LargeBarIcon 
                         icon={item.icon} 
                         title={item.text}
                         divider={index===2 ? true : false}
                         menuClicked={menuClicked} iconSelected={iconSelected}
-                        setIconSelected={setIconSelected}/>
+                        setIconSelected={setIconSelected}
+                    />
                     </>
                 ))
             } 

@@ -10,11 +10,46 @@ export default function CategoryTabs ({allCategories, selectedCategory, setSelec
     const [showRightArrow, setShowRightArrow] = useState(true);
     const [translate, setTranslate] = useState(0);
     const categoriesRef = useRef(null) //To store the size of the categories container
+
+    function handleLeftTranslate() {
+        setShowRightArrow(true);
+        setTranslate( translate => {
+            const translateShift = translate - TRANSLATE_PX;
+            if  (translateShift <= 0){
+                setShowLeftArrow(false);
+                return 0;
+            }
+            return translateShift;
+        }                        
+        )
+    }
+
+    function handleRightTranslate() {
+        setTranslate(translate => {
+            setShowLeftArrow(true);
+            const translateShift = translate + TRANSLATE_PX;
+            const containerWidth = categoriesRef.current.scrollWidth; //Width of the entire category container
+            const screenWidth = categoriesRef.current.clientWidth;    //Visible width of the screen 
+            
+            console.log(containerWidth, screenWidth, translateShift);
+            if(categoriesRef.current === null) { //If there's nothing in the container
+                return translate;
+            }
+            if (translateShift + screenWidth >= containerWidth) { //If it reaches the end of the container
+                setShowRightArrow(false);
+                return containerWidth - screenWidth;
+            }
+            return translateShift; 
+            }
+        )
+    }
+    
     return (
         <div ref={categoriesRef} className='overflow-x-hidden relative'> 
             <div //Category tabs
                 className='flex whitespace-nowrap gap-3 transition-transform w-[max-content]'
-                style={{ transform: `translateX(-${translate}px)` }}>
+                style={{ transform: `translateX(-${translate}px)` }}
+            >
                 {allCategories.map((category) => (
                     <ButtonDefault
                         key={category}
@@ -28,45 +63,15 @@ export default function CategoryTabs ({allCategories, selectedCategory, setSelec
             {showLeftArrow && <div className='absolute left-0 top-1/2 -translate-y-1/2 bg-gradient-to-r from-white from-50% to-transparent w-24 h-full'> {/*Left arrow*/}
                 <IconGhost 
                     className="h-full aspect-square w-auto p-1.5"
-                    onClick={() => {
-                        setShowRightArrow(true);
-                        setTranslate( translate => {
-                            const translateShift = translate - TRANSLATE_PX;
-                            if  (translateShift <= 0){
-                                setShowLeftArrow(false);
-                                return 0;
-                            }
-                            return translateShift;
-                        }                        
-                        )
-                    }
-                    }>
+                    onClick={handleLeftTranslate}
+                >
                     <ChevronLeftIcon />
                 </IconGhost>
             </div>}
             {showRightArrow && <div className='absolute right-0 top-1/2 -translate-y-1/2 bg-gradient-to-l from-white from-50% to-transparent w-24 h-full flex justify-end'> {/*Right arrow*/}
                 <IconGhost  
                     className="h-full aspect-square w-auto p-1.5"
-                    onClick={() => {
-                        setTranslate(translate => {
-                            setShowLeftArrow(true);
-                            const translateShift = translate + TRANSLATE_PX;
-                            const containerWidth = categoriesRef.current.scrollWidth; //Width of the entire category container
-                            const screenWidth = categoriesRef.current.clientWidth;    //Visible width of the screen 
-                            
-                            console.log(containerWidth, screenWidth, translateShift);
-                            if(categoriesRef.current === null) { //If there's nothing in the container
-                                return translate;
-                            }
-                            if (translateShift + screenWidth >= containerWidth) { //If it reaches the end of the container
-                                setShowRightArrow(false);
-                                return containerWidth - screenWidth;
-                            }
-                            return translateShift; 
-                            }
-                        )
-                    }
-                    }>
+                    onClick={handleRightTranslate}>
                     <ChevronRightIcon />
                 </IconGhost>
             </div>}

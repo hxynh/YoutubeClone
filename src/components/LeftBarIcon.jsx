@@ -9,7 +9,8 @@ export function SmallBarIcon ({icon, title, smallMenu, menuClicked, iconSelected
                 onClick={() => {
                     setIconSelected(title)
                     console.log(iconSelected)}}
-             className={`${title===iconSelected ? "bg-secondary-dark-hover" : ""}flex flex-col w-full rounded-lg justify-center`}>
+                className={`${title===iconSelected ? "bg-secondary-dark-hover" : ""}flex flex-col w-full rounded-lg justify-center`}
+            >
                 {icon}
                 <div className="text-[0.6rem]">
                     {title}
